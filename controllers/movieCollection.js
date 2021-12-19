@@ -93,7 +93,9 @@ export const getCollectionbyId=(req,res)=>{
             res.sendStatus(403);
         }else {
             const {id}=req.params;
-            res.send(collections.find((collection)=>collection.collection_uuid===id));   
+            const collection=collections.find((collection)=>collection.collection_uuid===id);
+            if(!collection)res.send('no collection found');
+            else res.send(collection);
         }
     });
 }
@@ -118,11 +120,13 @@ export const updateCollection=(req,res)=>{
             const {id}=req.params;
             const {title,description,movies}=req.body;
             const collection=collections.find((collection)=>collection.collection_uuid===id);
-            if(title)collection.title=title;
-            if(description)collection.description=description;
-            if(movies)collection.movies=movies;
-
-            res.send(collection);
+            if(!collection)res.send('No collection found');
+            else {
+                if(title)collection.title=title;
+                if(description)collection.description=description;
+                if(movies)collection.movies=movies;
+                res.send(collection);
+            }
         }
     });
 }
